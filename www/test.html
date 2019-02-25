@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Testing</title>
+    </head>
+    <body>
+    <p> Here are the results of a series of tests run on the Spatial Skills code</p>
+    <p id="totals"></p>
+        <textarea id="results" rows="100" cols="200"></textarea>
+    
+        <script src="js/Line.js"> </script>
+        <script src="js/IsometricDistances.js"> </script>  
+        <script src="js/IsometricAnswers.js"> </script>
+        <script src="js/OrthographicAnswers.js"> </script>
+        
+    </body>
+    
+    <script type="text/javascript">
+        var totals = document.getElementById("totals");
+        var textArea = document.getElementById("results");
+        var totalTests = 0
+        var totalPassed = 0
+        var totalFailed = 0
+        var expected;
+        var result;
+        
+        
+        
+        //test the lengthOfHytpotenuse function
+        textArea.value += "----------TEST LengthOfHypotenuse(side1, side2)-------------------------------------------------------------------- \n\n"
+        var hytpotenuse;
+        
+        hypotenuse = lengthOfHypotenuse(3,4)
+        totalTests++
+        expected = 5
+        if (hypotenuse === expected){
+            result = "PASS"
+            totalPassed++
+        }
+        else {
+            result = "FAIL"
+            totalFailed++
+        }
+        textArea.value += result + ": The length of the hypotenuse for a triangle with side 3 and side 4 should equal " + expected + ". Actual result: " + hypotenuse + "\n"
+        
+    
+        hypotenuse = lengthOfHypotenuse(5,12)
+        totalTests++
+        expected = 13
+        if (hypotenuse === expected){
+            result = "PASS"
+            totalPassed++
+        }
+        else {
+            result = "FAIL"
+            totalFailed++
+        }
+        textArea.value += result + ": The length of the hypotenuse for a triangle with side 5 and side 12 should equal " + expected +  ". Actual result: " + hypotenuse + "\n"
+    
+        textArea.value += "\n\n"
+        
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        //test the lengthOfSide function
+        textArea.value += "----------TEST LengthOfSide(hypotenuse, side2)-------------------------------------------------------------------- \n\n"
+        var side;
+        
+        side = lengthOfSide(5,4)
+        totalTests++
+        expected = 3
+        if (side === expected){
+            result = "PASS"
+            totalPassed++
+        }
+        else {
+            result = "FAIL"
+            totalFailed++
+        }
+        textArea.value += result + ": The length of the other side for a triangle with hypotenuse 5 and side 4 should equal " + expected + ". Actual result: " + side + "\n"
+        
+    
+        side = lengthOfSide(13,12)
+        totalTests++
+        expected = 5
+        if (side === expected){
+            result = "PASS"
+            totalPassed++
+        }
+        else {
+            result = "FAIL"
+            totalFailed++
+        }
+        textArea.value += result + ": The length of the other side for a triangle with hypotenuse 13 and side 12 should equal " + expected +  ". Actual result: " + side + "\n"
+    
+        textArea.value += "\n\n"
+        
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        //test the reverseLine function
+        textArea.value += "----------TEST reverseLine(line)-------------------------------------------------------------------- \n\n"
+        var originalX1;
+        var originalY1;
+        var originalX2;
+        var originalY2;
+        var originalLine
+        var reversedLine
+        
+        
+        originalX1 = 4
+        originalY1 = 3
+        originalX2 = 2
+        originalY2 = 1
+        originalLine = new Line(originalX1, originalY1, originalX2, originalY2)
+        reversedLine = reverseLine(originalLine)
+        totalTests++
+        
+        if (reversedLine.x1 === originalX2 && reversedLine.y1 === originalY2 && reversedLine.x2 === originalX1 && reversedLine.y2 === originalY1){
+            result = "PASS"
+            totalPassed++
+        }
+        else {
+            result = "FAIL"
+            totalFailed++
+        }
+        textArea.value += result + ": The original line x1(" + originalX1 + "), y1(" + originalY1 + "), x2(" + originalX2 + "), y2(" + originalY2 + "). Reversed line x1(" + reversedLine.x1 + "), y1(" + reversedLine.y1 + "), x2(" + reversedLine.x2 + "), y2(" + reversedLine.y2 + ").\n"
+        
+        
+        originalX1 = 1
+        originalY1 = 7
+        originalX2 = 5
+        originalY2 = 4
+        originalLine = new Line(originalX1, originalY1, originalX2, originalY2)
+        reversedLine = reverseLine(originalLine)
+        totalTests++
+        
+        if (reversedLine.x1 === originalX2 && reversedLine.y1 === originalY2 && reversedLine.x2 === originalX1 && reversedLine.y2 === originalY1){
+            result = "PASS"
+            totalPassed++
+        }
+        else {
+            result = "FAIL"
+            totalFailed++
+        }
+        textArea.value += result + ": The original line x1(" + originalX1 + "), y1(" + originalY1 + "), x2(" + originalX2 + "), y2(" + originalY2 + "). Reversed line x1(" + reversedLine.x1 + "), y1(" + reversedLine.y1 + "), x2(" + reversedLine.x2 + "), y2(" + reversedLine.y2 + "). \n"
+        
+        textArea.value += "\n\n"
+        
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        //test the compareLine function
+        textArea.value += "----------TEST compareLines(line1, line2)-------------------------------------------------------------------- \n\n"
+        var firstX1;
+        var firstY1;
+        var firstX2;
+        var firstY2;
+        var firstLine
+        var secondX1;
+        var secondY1;
+        var secondX2;
+        var secondY2;
+        var secondLine
+        var actual
+        
+        
+        firstX1 = 4
+        firstY1 = 3
+        firstX2 = 2
+        firstY2 = 1
+        firstLine = new Line(firstX1, firstY1, firstX2, firstY2)
+        secondX1 = 4
+        secondY1 = 3
+        secondX2 = 2
+        secondY2 = 1
+        secondLine = new Line(secondX1, secondY1, secondX2, secondY2)
+        totalTests++
+        
+        expected = true
+        actual = compareLines(firstLine, secondLine)
+        
+        if (actual === true){
+            result = "PASS"
+            totalPassed++
+        }
+        else {
+            result = "FAIL"
+            totalFailed++
+        }
+        textArea.value += result + ": The first line x1(" + firstX1 + "), y1(" + firstY1 + "), x2(" + firstX2 + "), y2(" + firstY2 + "). Second line x1(" + secondX1 + "), y1(" + secondY1 + "), x2(" + secondX2 + "), y2(" + secondY2 + "). Expected Result: " + expected + ". Actual result: " + actual + "\n"
+        
+        
+        firstX1 = 4
+        firstY1 = 3
+        firstX2 = 2
+        firstY2 = 1
+        firstLine = new Line(firstX1, firstY1, firstX2, firstY2)
+        secondX1 = 3
+        secondY1 = 2
+        secondX2 = 5
+        secondY2 = 1
+        secondLine = new Line(secondX1, secondY1, secondX2, secondY2)
+        totalTests++
+        
+        expected = false
+        actual = compareLines(firstLine, secondLine)
+        
+        if (actual === false){
+            result = "PASS"
+            totalPassed++
+        }
+        else {
+            result = "FAIL"
+            totalFailed++
+        }
+        textArea.value += result + ": The first line x1(" + firstX1 + "), y1(" + firstY1 + "), x2(" + firstX2 + "), y2(" + firstY2 + "). Second line x1(" + secondX1 + "), y1(" + secondY1 + "), x2(" + secondX2 + "), y2(" + secondY2 + "). Expected Result: " + expected + ". Actual result: " + actual + "\n"
+        
+        textArea.value += "\n\n"
+        
+        
+        
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        //test the findBottomLeftPoint function for isometric grid
+        //points can only be (even, even) or (odd, odd)
+        textArea.value += "----------TEST findBottomLeftPoint(linearray) -- Isometric Grid--this function expects lines to be left to right, or top to bottom (vertical)-------------------- \n\n"
+        var firstX1;
+        var firstY1;
+        var firstX2;
+        var firstY2;
+        var firstLine
+        var secondX1;
+        var secondY1;
+        var secondX2;
+        var secondY2;
+        var secondLine
+        var actualX1
+        var actualY1
+        
+        
+        firstX1 = 1
+        firstY1 = 3
+        firstX2 = 2
+        firstY2 = 2
+        firstLine = new Line(firstX1, firstY1, firstX2, firstY2)
+        secondX1 = 4
+        secondY1 = 4
+        secondX2 = 1
+        secondY2 = 5
+        secondLine = new Line(secondX1, secondY1, secondX2, secondY2)
+        totalTests++
+        
+        expectedX1 = 1
+        expectedY1 = 3
+        result = findBottomLeftPoint([firstLine, secondLine])
+        actualX1 = result[0]
+        actualY1 = result[1]
+        
+        if (actualX1 === expectedX1 && actualY1 === expectedY1 ){
+            result = "PASS"
+            totalPassed++
+        }
+        else {
+            result = "FAIL"
+            totalFailed++
+        }
+        textArea.value += result + ": The first line in the array is x1(" + firstX1 + "), y1(" + firstY1 + "), x2(" + firstX2 + "), y2(" + firstY2 + "). The second line is x1(" + secondX1 + "), y1(" + secondY1 + "), x2(" + secondX2 + "), y2(" + secondY2 + "). Expected Result: x1(" + expectedX1 + "), y1(" + expectedY1 + "). Actual result: x1(" + actualX1 + "), y1(" + actualY1 + ").\n"
+        
+        
+        
+        firstX1 = 3
+        firstY1 = 5
+        firstX2 = 3
+        firstY2 = 7
+        firstLine = new Line(firstX1, firstY1, firstX2, firstY2)
+        secondX1 = 3
+        secondY1 = 5
+        secondX2 = 4
+        secondY2 = 4
+        secondLine = new Line(secondX1, secondY1, secondX2, secondY2)
+        totalTests++
+        
+        expectedX1 = 3
+        expectedY1 = 7
+        result = findBottomLeftPoint([firstLine, secondLine])
+        actualX1 = result[0]
+        actualY1 = result[1]
+        
+        if (actualX1 === expectedX1 && actualY1 === expectedY1 ){
+            result = "PASS"
+            totalPassed++
+        }
+        else {
+            result = "FAIL"
+            totalFailed++
+        }
+        textArea.value += result + ": The first line in the array is x1(" + firstX1 + "), y1(" + firstY1 + "), x2(" + firstX2 + "), y2(" + firstY2 + "). The second line is x1(" + secondX1 + "), y1(" + secondY1 + "), x2(" + secondX2 + "), y2(" + secondY2 + "). Expected Result: x1(" + expectedX1 + "), y1(" + expectedY1 + "). Actual result: x1(" + actualX1 + "), y1(" + actualY1 + ").\n"
+        
+        textArea.value += "\n\n"
+        
+        
+        
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        //test the findBottomLeftPoint function for orthographic grid
+        //no restriction on points
+        textArea.value += "----------TEST findBottomLeftPointOrth(linearray) -- Orthographic Grid--this function expects lines to be left to right, or top to bottom (vertical)-------------------- \n\n"
+        var firstX1;
+        var firstY1;
+        var firstX2;
+        var firstY2;
+        var firstLine
+        var secondX1;
+        var secondY1;
+        var secondX2;
+        var secondY2;
+        var secondLine
+        var actualX1
+        var actualY1
+        
+        
+        firstX1 = 1
+        firstY1 = 3
+        firstX2 = 2
+        firstY2 = 2
+        firstLine = new Line(firstX1, firstY1, firstX2, firstY2)
+        secondX1 = 4
+        secondY1 = 4
+        secondX2 = 1
+        secondY2 = 5
+        secondLine = new Line(secondX1, secondY1, secondX2, secondY2)
+        totalTests++
+        
+        expectedX1 = 1
+        expectedY1 = 3
+        result = findBottomLeftPointOrth([firstLine, secondLine])
+        actualX1 = result[0]
+        actualY1 = result[1]
+        
+        if (actualX1 === expectedX1 && actualY1 === expectedY1 ){
+            result = "PASS"
+            totalPassed++
+        }
+        else {
+            result = "FAIL"
+            totalFailed++
+        }
+        textArea.value += result + ": The first line in the array is x1(" + firstX1 + "), y1(" + firstY1 + "), x2(" + firstX2 + "), y2(" + firstY2 + "). The second line is x1(" + secondX1 + "), y1(" + secondY1 + "), x2(" + secondX2 + "), y2(" + secondY2 + "). Expected Result: x1(" + expectedX1 + "), y1(" + expectedY1 + "). Actual result: x1(" + actualX1 + "), y1(" + actualY1 + ").\n"
+        
+        
+        
+        firstX1 = 3
+        firstY1 = 5
+        firstX2 = 3
+        firstY2 = 7
+        firstLine = new Line(firstX1, firstY1, firstX2, firstY2)
+        secondX1 = 3
+        secondY1 = 5
+        secondX2 = 4
+        secondY2 = 4
+        secondLine = new Line(secondX1, secondY1, secondX2, secondY2)
+        totalTests++
+        
+        expectedX1 = 3
+        expectedY1 = 7
+        result = findBottomLeftPointOrth([firstLine, secondLine])
+        actualX1 = result[0]
+        actualY1 = result[1]
+        
+        if (actualX1 === expectedX1 && actualY1 === expectedY1 ){
+            result = "PASS"
+            totalPassed++
+        }
+        else {
+            result = "FAIL"
+            totalFailed++
+        }
+        textArea.value += result + ": The first line in the array is x1(" + firstX1 + "), y1(" + firstY1 + "), x2(" + firstX2 + "), y2(" + firstY2 + "). The second line is x1(" + secondX1 + "), y1(" + secondY1 + "), x2(" + secondX2 + "), y2(" + secondY2 + "). Expected Result: x1(" + expectedX1 + "), y1(" + expectedY1 + "). Actual result: x1(" + actualX1 + "), y1(" + actualY1 + ").\n"
+        
+        textArea.value += "\n\n"
+        
+        
+        
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        //test the breakUpLine function for isometric grid
+        textArea.value += "----------TEST breakUpLine(line) -- Isometric Grid----------------------------------------------------- \n\n"
+        var firstX1;
+        var firstY1;
+        var firstX2;
+        var firstY2;
+        var firstLine
+        var actualFirstX1
+        var actualFirstY1
+        var actualFirstX2
+        var actualFirstY2
+        var actualSecondX1
+        var actualSecondY1
+        var actualSecondX2
+        var actualSecondY2
+        var brokenUpLine
+        var firstBrokenLine
+        var secondBrokenLine
+        
+        
+        firstX1 = 1
+        firstY1 = 3
+        firstX2 = 3
+        firstY2 = 1
+        firstLine = new Line(firstX1, firstY1, firstX2, firstY2)
+        brokenUpLine = breakUpLine(firstLine)
+        firstBrokenLine = brokenUpLine[0]
+        secondBrokenLine = brokenUpLine[1]
+        totalTests++
+        
+        expectedFirstX1 = 1
+        expectedFirstY1 = 3
+        expectedFirstX2 = 2
+        expectedFirstY2 = 2
+        expectedSecondX1 = 2
+        expectedSecondY1 = 2
+        expectedSecondX2 = 3
+        expectedSecondY2 = 1
+        actualFirstX1 = firstBrokenLine.x1
+        actualFirstY1 = firstBrokenLine.y1
+        actualFirstX2 = firstBrokenLine.x2
+        actualFirstY2 = firstBrokenLine.y2
+        actualSecondX1 = secondBrokenLine.x1
+        actualSecondY1 = secondBrokenLine.y1
+        actualSecondX2 = secondBrokenLine.x2
+        actualSecondY2 = secondBrokenLine.y2
+        
+        if (actualFirstX1 === expectedFirstX1 && actualFirstY1 === expectedFirstY1 && actualFirstX2 === expectedFirstX2 && actualFirstY2 === expectedFirstY2 && actualSecondX1 === expectedSecondX1 && actualSecondY1 === expectedSecondY1 && actualSecondX2 === expectedSecondX2 && actualSecondY2 === expectedSecondY2){
+            result = "PASS"
+            totalPassed++
+        }
+        else {
+            result = "FAIL"
+            totalFailed++
+        }
+        textArea.value += result + "(DIAGONAL): The original line x1(" + firstX1 + "), y1(" + firstY1 + "), x2(" + firstX2 + "), y2(" + firstY2 + "). Expected Result: The first smaller line in the array is x1(" + expectedFirstX1 + "), y1(" + expectedFirstY1 + "), x2(" + expectedFirstX2 + "), y2(" + expectedFirstY2 + "). The second smaller line is x1(" + expectedSecondX1 + "), y1(" + expectedSecondY1 + "), x2(" + expectedSecondX2 + "), y2(" + expectedSecondY2 + "). Actual result: x1(" + actualFirstX1 + "), y1(" + actualFirstY1 + "), x2(" + actualFirstX2 + "), y2(" + actualFirstY2 + "). The second smaller line is x1(" + actualSecondX1 + "), y1(" + actualSecondY1 + "), x2(" + actualSecondX2 + "), y2(" + actualSecondY2 + ").\n\n"
+        
+        
+        
+        
+        
+        firstX1 = 4
+        firstY1 = 4
+        firstX2 = 4
+        firstY2 = 8
+        firstLine = new Line(firstX1, firstY1, firstX2, firstY2)
+        brokenUpLine = breakUpLine(firstLine)
+        firstBrokenLine = brokenUpLine[0]
+        secondBrokenLine = brokenUpLine[1]
+        totalTests++
+        
+        expectedFirstX1 = 4
+        expectedFirstY1 = 4
+        expectedFirstX2 = 4
+        expectedFirstY2 = 6
+        expectedSecondX1 = 4
+        expectedSecondY1 = 6
+        expectedSecondX2 = 4
+        expectedSecondY2 = 8
+        actualFirstX1 = firstBrokenLine.x1
+        actualFirstY1 = firstBrokenLine.y1
+        actualFirstX2 = firstBrokenLine.x2
+        actualFirstY2 = firstBrokenLine.y2
+        actualSecondX1 = secondBrokenLine.x1
+        actualSecondY1 = secondBrokenLine.y1
+        actualSecondX2 = secondBrokenLine.x2
+        actualSecondY2 = secondBrokenLine.y2
+        
+        if (actualFirstX1 === expectedFirstX1 && actualFirstY1 === expectedFirstY1 && actualFirstX2 === expectedFirstX2 && actualFirstY2 === expectedFirstY2 && actualSecondX1 === expectedSecondX1 && actualSecondY1 === expectedSecondY1 && actualSecondX2 === expectedSecondX2 && actualSecondY2 === expectedSecondY2){
+            result = "PASS"
+            totalPassed++
+        }
+        else {
+            result = "FAIL"
+            totalFailed++
+        }
+        textArea.value += result + "(VERTICAL): The original line x1(" + firstX1 + "), y1(" + firstY1 + "), x2(" + firstX2 + "), y2(" + firstY2 + "). Expected Result: The first smaller line in the array is x1(" + expectedFirstX1 + "), y1(" + expectedFirstY1 + "), x2(" + expectedFirstX2 + "), y2(" + expectedFirstY2 + "). The second smaller line is x1(" + expectedSecondX1 + "), y1(" + expectedSecondY1 + "), x2(" + expectedSecondX2 + "), y2(" + expectedSecondY2 + "). Actual result: x1(" + actualFirstX1 + "), y1(" + actualFirstY1 + "), x2(" + actualFirstX2 + "), y2(" + actualFirstY2 + "). The second smaller line is x1(" + actualSecondX1 + "), y1(" + actualSecondY1 + "), x2(" + actualSecondX2 + "), y2(" + actualSecondY2 + ").\n\n"
+        
+        
+        
+        firstX1 = 4
+        firstY1 = 4
+        firstX2 = 8
+        firstY2 = 4
+        firstLine = new Line(firstX1, firstY1, firstX2, firstY2)
+        brokenUpLine = breakUpLine(firstLine)
+        firstBrokenLine = brokenUpLine[0]
+        secondBrokenLine = brokenUpLine[1]
+        totalTests++
+        
+        expectedFirstX1 = 4
+        expectedFirstY1 = 4
+        expectedFirstX2 = 6
+        expectedFirstY2 = 4
+        expectedSecondX1 = 6
+        expectedSecondY1 = 4
+        expectedSecondX2 = 8
+        expectedSecondY2 = 4
+        actualFirstX1 = firstBrokenLine.x1
+        actualFirstY1 = firstBrokenLine.y1
+        actualFirstX2 = firstBrokenLine.x2
+        actualFirstY2 = firstBrokenLine.y2
+        actualSecondX1 = secondBrokenLine.x1
+        actualSecondY1 = secondBrokenLine.y1
+        actualSecondX2 = secondBrokenLine.x2
+        actualSecondY2 = secondBrokenLine.y2
+        
+        if (actualFirstX1 === expectedFirstX1 && actualFirstY1 === expectedFirstY1 && actualFirstX2 === expectedFirstX2 && actualFirstY2 === expectedFirstY2 && actualSecondX1 === expectedSecondX1 && actualSecondY1 === expectedSecondY1 && actualSecondX2 === expectedSecondX2 && actualSecondY2 === expectedSecondY2){
+            result = "PASS"
+            totalPassed++
+        }
+        else {
+            result = "FAIL"
+            totalFailed++
+        }
+        textArea.value += result + "(HORIZONTAL): The original line x1(" + firstX1 + "), y1(" + firstY1 + "), x2(" + firstX2 + "), y2(" + firstY2 + "). Expected Result: The first smaller line in the array is x1(" + expectedFirstX1 + "), y1(" + expectedFirstY1 + "), x2(" + expectedFirstX2 + "), y2(" + expectedFirstY2 + "). The second smaller line is x1(" + expectedSecondX1 + "), y1(" + expectedSecondY1 + "), x2(" + expectedSecondX2 + "), y2(" + expectedSecondY2 + "). Actual result: x1(" + actualFirstX1 + "), y1(" + actualFirstY1 + "), x2(" + actualFirstX2 + "), y2(" + actualFirstY2 + "). The second smaller line is x1(" + actualSecondX1 + "), y1(" + actualSecondY1 + "), x2(" + actualSecondX2 + "), y2(" + actualSecondY2 + ").\n\n"
+        
+        textArea.value += "\n\n"
+        
+        
+        
+        
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+        //test the breakUpLine function for orthographic grid
+        textArea.value += "----------TEST breakUpLineOrth(line) -- Orthographic Grid----------------------------------------------------- \n\n"
+        var firstX1;
+        var firstY1;
+        var firstX2;
+        var firstY2;
+        var firstLine
+        var actualFirstX1
+        var actualFirstY1
+        var actualFirstX2
+        var actualFirstY2
+        var actualSecondX1
+        var actualSecondY1
+        var actualSecondX2
+        var actualSecondY2
+        var brokenUpLine
+        var firstBrokenLine
+        var secondBrokenLine
+        
+        
+        firstX1 = 1
+        firstY1 = 3
+        firstX2 = 3
+        firstY2 = 1
+        firstLine = new Line(firstX1, firstY1, firstX2, firstY2)
+        brokenUpLine = breakUpLineOrth(firstLine)
+        firstBrokenLine = brokenUpLine[0]
+        secondBrokenLine = brokenUpLine[1]
+        totalTests++
+        
+        expectedFirstX1 = 1
+        expectedFirstY1 = 3
+        expectedFirstX2 = 2
+        expectedFirstY2 = 2
+        expectedSecondX1 = 2
+        expectedSecondY1 = 2
+        expectedSecondX2 = 3
+        expectedSecondY2 = 1
+        actualFirstX1 = firstBrokenLine.x1
+        actualFirstY1 = firstBrokenLine.y1
+        actualFirstX2 = firstBrokenLine.x2
+        actualFirstY2 = firstBrokenLine.y2
+        actualSecondX1 = secondBrokenLine.x1
+        actualSecondY1 = secondBrokenLine.y1
+        actualSecondX2 = secondBrokenLine.x2
+        actualSecondY2 = secondBrokenLine.y2
+        
+        if (actualFirstX1 === expectedFirstX1 && actualFirstY1 === expectedFirstY1 && actualFirstX2 === expectedFirstX2 && actualFirstY2 === expectedFirstY2 && actualSecondX1 === expectedSecondX1 && actualSecondY1 === expectedSecondY1 && actualSecondX2 === expectedSecondX2 && actualSecondY2 === expectedSecondY2){
+            result = "PASS"
+            totalPassed++
+        }
+        else {
+            result = "FAIL"
+            totalFailed++
+        }
+        textArea.value += result + "(DIAGONAL): The original line x1(" + firstX1 + "), y1(" + firstY1 + "), x2(" + firstX2 + "), y2(" + firstY2 + "). Expected Result: The first smaller line in the array is x1(" + expectedFirstX1 + "), y1(" + expectedFirstY1 + "), x2(" + expectedFirstX2 + "), y2(" + expectedFirstY2 + "). The second smaller line is x1(" + expectedSecondX1 + "), y1(" + expectedSecondY1 + "), x2(" + expectedSecondX2 + "), y2(" + expectedSecondY2 + "). Actual result: x1(" + actualFirstX1 + "), y1(" + actualFirstY1 + "), x2(" + actualFirstX2 + "), y2(" + actualFirstY2 + "). The second smaller line is x1(" + actualSecondX1 + "), y1(" + actualSecondY1 + "), x2(" + actualSecondX2 + "), y2(" + actualSecondY2 + ").\n\n"
+        
+        
+        
+        
+        
+        firstX1 = 4
+        firstY1 = 4
+        firstX2 = 4
+        firstY2 = 6
+        firstLine = new Line(firstX1, firstY1, firstX2, firstY2)
+        brokenUpLine = breakUpLineOrth(firstLine)
+        firstBrokenLine = brokenUpLine[0]
+        secondBrokenLine = brokenUpLine[1]
+        totalTests++
+        
+        expectedFirstX1 = 4
+        expectedFirstY1 = 4
+        expectedFirstX2 = 4
+        expectedFirstY2 = 5
+        expectedSecondX1 = 4
+        expectedSecondY1 = 5
+        expectedSecondX2 = 4
+        expectedSecondY2 = 6
+        actualFirstX1 = firstBrokenLine.x1
+        actualFirstY1 = firstBrokenLine.y1
+        actualFirstX2 = firstBrokenLine.x2
+        actualFirstY2 = firstBrokenLine.y2
+        actualSecondX1 = secondBrokenLine.x1
+        actualSecondY1 = secondBrokenLine.y1
+        actualSecondX2 = secondBrokenLine.x2
+        actualSecondY2 = secondBrokenLine.y2
+        
+        if (actualFirstX1 === expectedFirstX1 && actualFirstY1 === expectedFirstY1 && actualFirstX2 === expectedFirstX2 && actualFirstY2 === expectedFirstY2 && actualSecondX1 === expectedSecondX1 && actualSecondY1 === expectedSecondY1 && actualSecondX2 === expectedSecondX2 && actualSecondY2 === expectedSecondY2){
+            result = "PASS"
+            totalPassed++
+        }
+        else {
+            result = "FAIL"
+            totalFailed++
+        }
+        textArea.value += result + "(VERTICAL): The original line x1(" + firstX1 + "), y1(" + firstY1 + "), x2(" + firstX2 + "), y2(" + firstY2 + "). Expected Result: The first smaller line in the array is x1(" + expectedFirstX1 + "), y1(" + expectedFirstY1 + "), x2(" + expectedFirstX2 + "), y2(" + expectedFirstY2 + "). The second smaller line is x1(" + expectedSecondX1 + "), y1(" + expectedSecondY1 + "), x2(" + expectedSecondX2 + "), y2(" + expectedSecondY2 + "). Actual result: x1(" + actualFirstX1 + "), y1(" + actualFirstY1 + "), x2(" + actualFirstX2 + "), y2(" + actualFirstY2 + "). The second smaller line is x1(" + actualSecondX1 + "), y1(" + actualSecondY1 + "), x2(" + actualSecondX2 + "), y2(" + actualSecondY2 + ").\n\n"
+        
+        
+        
+        firstX1 = 4
+        firstY1 = 4
+        firstX2 = 6
+        firstY2 = 4
+        firstLine = new Line(firstX1, firstY1, firstX2, firstY2)
+        brokenUpLine = breakUpLineOrth(firstLine)
+        firstBrokenLine = brokenUpLine[0]
+        secondBrokenLine = brokenUpLine[1]
+        totalTests++
+        
+        expectedFirstX1 = 4
+        expectedFirstY1 = 4
+        expectedFirstX2 = 5
+        expectedFirstY2 = 4
+        expectedSecondX1 = 5
+        expectedSecondY1 = 4
+        expectedSecondX2 = 6
+        expectedSecondY2 = 4
+        actualFirstX1 = firstBrokenLine.x1
+        actualFirstY1 = firstBrokenLine.y1
+        actualFirstX2 = firstBrokenLine.x2
+        actualFirstY2 = firstBrokenLine.y2
+        actualSecondX1 = secondBrokenLine.x1
+        actualSecondY1 = secondBrokenLine.y1
+        actualSecondX2 = secondBrokenLine.x2
+        actualSecondY2 = secondBrokenLine.y2
+        
+        if (actualFirstX1 === expectedFirstX1 && actualFirstY1 === expectedFirstY1 && actualFirstX2 === expectedFirstX2 && actualFirstY2 === expectedFirstY2 && actualSecondX1 === expectedSecondX1 && actualSecondY1 === expectedSecondY1 && actualSecondX2 === expectedSecondX2 && actualSecondY2 === expectedSecondY2){
+            result = "PASS"
+            totalPassed++
+        }
+        else {
+            result = "FAIL"
+            totalFailed++
+        }
+        textArea.value += result + "(HORIZONTAL): The original line x1(" + firstX1 + "), y1(" + firstY1 + "), x2(" + firstX2 + "), y2(" + firstY2 + "). Expected Result: The first smaller line in the array is x1(" + expectedFirstX1 + "), y1(" + expectedFirstY1 + "), x2(" + expectedFirstX2 + "), y2(" + expectedFirstY2 + "). The second smaller line is x1(" + expectedSecondX1 + "), y1(" + expectedSecondY1 + "), x2(" + expectedSecondX2 + "), y2(" + expectedSecondY2 + "). Actual result: x1(" + actualFirstX1 + "), y1(" + actualFirstY1 + "), x2(" + actualFirstX2 + "), y2(" + actualFirstY2 + "). The second smaller line is x1(" + actualSecondX1 + "), y1(" + actualSecondY1 + "), x2(" + actualSecondX2 + "), y2(" + actualSecondY2 + ").\n\n"
+        
+        textArea.value += "\n\n"
+        
+        totals.innerHTML = "Total Tests: " + totalTests + ". Total tests successfully passed: " + totalPassed + ". Total number of tests failed: " + totalFailed 
+    
+    </script>
+
+</html>

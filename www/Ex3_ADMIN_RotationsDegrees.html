@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>Canvas tutorial</title>
+    <script src="js/vendor/jquery.js"></script>
+    <script src=""></script>
+    <script src=""></script>
+    <script src=""></script>
+    <style type="text/css">
+      canvas { border: 1px solid black; }  
+    </style>
+  </head>
+  <body onload="startup();">
+      <div>
+          <canvas id="isometricPreImageEx3" width="300" height="300">
+            Your browser does not support the canvas element.
+          </canvas>
+          
+          <canvas id="isometricEx3" width="260" height="300">
+            Your browser does not support the canvas element.
+          </canvas> 
+      </div>
+      
+      <div>
+          <button id="isometricPreImageEx3UndoButton">Undo</button>
+          <button id="isometricPreImageEx3ClearButton">Clear</button>
+          <button id="isometricPreImageEx3SolidButton"  style="border-style:inset;" onclick="drawDashedLine(this, isometricEx3DashedButton);">Solid</button>
+          <button id="isometricPreImageEx3DashedButton" style="display:none">Dashed</button>
+          <button id="isometricPreImageEx3CheckAnswerButton" style="display:none">Check Answer</button>
+          
+          <button id="isometricEx3UndoButton">Undo</button>
+          <button id="isometricEx3ClearButton">Clear</button>
+          <button id="isometricEx3SolidButton"  style="border-style:inset;" onclick="drawDashedLine(this, isometricEx3DashedButton);">Solid</button>
+          <button id="isometricEx3DashedButton" style="display:none">Dashed</button>
+          <button id="isometricEx3CheckAnswerButton" style="display:none">Check Answer</button>
+        
+          
+          <p id="orthographicEx3TopAnswer"></p>
+          <p id="isometricEx3Answer"></p>
+      </div>
+          
+      <div>
+          <button id="isometricPreImageEx3xAxis" class="axisButtons">Draw Blank X-axis</button>
+          <button id="isometricPreImageEx3yAxis" class="axisButtons">Draw Blank Y-axis</button>
+          <button id="isometricPreImageEx3zAxis" class="axisButtons">Draw Blank Z-axis</button>
+          <button id="isometricPreImageEx3UndoAxisButton">Undo Axis</button>
+          <button id="isometricPreImageEx3ClearAxesButton">Clear Axes</button>
+      </div>
+      
+      <div>
+          <button id="isometricPreImageEx3xTrail" class="trailButtons">Draw X-axis Trail</button>
+          <button id="isometricPreImageEx3yTrail" class="trailButtons">Draw Y-axis Trail</button>
+          <button id="isometricPreImageEx3zTrail" class="trailButtons">Draw Z-axis Trail</button>
+          <button id="isometricPreImageEx3UndoTrailButton">Undo Axis</button>
+          <button id="isometricPreImageEx3ClearTrailsButton">Clear Axes</button>
+      </div>
+      
+      <div>
+          <canvas id="rotationsEx3" width="300" height="100">
+            Your browser does not support the canvas element.
+          </canvas>
+          <div>
+            <button id="pos90">+90</button>
+            <button id="pos180">+180</button>
+            <button id="pos270">+270</button>
+            <button id="rotationsEx3UndoButton">Undo Rotation</button>
+            <button id="rotationsEx3ClearButton">Clear Rotations</button>
+          </div>
+          <div>
+            <button id="neg90">-90</button>
+            <button id="neg180">-180</button>
+            <button id="neg270">-270</button>
+          </div>
+          
+          <p id="answer"></p>
+          <button id="writeToJSONButton">Write to JSON</button>
+          <br>
+      </div>        
+      
+      <div>
+          
+          <textarea id="question" rows="20" columns="60" style="width:100%"></textarea>
+          
+      </div>
+    <script src="js/Question.js"></script>
+    <script src="js/CanvasObject.js"></script>
+    <script src="js/RotationCanvas.js"></script>
+    <script src="js/NumericRotation.js"></script>
+    <script src="js/Line.js"></script>
+    <script src="js/Axis.js"></script>
+    <script src="js/AxisTrail.js"></script>
+    <script src="js/LineProperties.js"></script>
+    <script src="js/IsometricDistances.js"></script>
+    <script src="js/AddTouch_ADMIN_only.js"></script>  
+    <script src="js/Messages.js"></script> 
+    <script src="js/IsometricAnswers.js"></script>
+    <script src="js/Startup_Ex3_Admin.js"></script>
+  </body>
+    
+     
+        
+</html>

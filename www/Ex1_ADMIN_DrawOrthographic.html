@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>Canvas tutorial</title>
+    <script src="js/vendor/jquery.js"></script>
+    <script src=""></script>
+    <script src=""></script>
+    <script src=""></script>
+    <style type="text/css">
+      canvas { border: 1px solid black; }  
+    </style>
+  </head>
+  <body onload="startup();">
+      <div>
+          <canvas class="orthographic" id="orthographicTopEx1" width="120" height="100">
+            Your browser does not support the canvas element.
+          </canvas>
+          
+          <canvas id="isometricEx1" width="250" height="315">
+            Your browser does not support the canvas element.
+          </canvas> 
+      </div>
+      
+      <div>
+          <button id="orthographicTopEx1UndoButton">Undo</button>
+          <button id="orthographicTopEx1ClearButton">Clear</button>
+          <button id="orthographicTopEx1SolidButton"  style="border-style:inset;" onclick="drawDashedLine(this, orthographicTopEx1DashedButton);">Solid</button>
+          <button id="orthographicTopEx1DashedButton">Dashed</button>
+          <button id="orthographicTopCheckEx1AnswerButton" style="display:none">Check Answer</button>      
+
+          <button id="isometricEx1UndoButton">Undo</button>
+          <button id="isometricEx1ClearButton">Clear</button>
+          <button id="isometricEx1SolidButton"  style="border-style:inset;" onclick="drawDashedLine(this, isometricEx1DashedButton);">Solid</button>
+          <button id="isometricEx1DashedButton" style="display:none">Dashed</button>
+          <button id="isometricEx1CheckAnswerButton" style="display:none">Check Answer</button>
+          <button id="isometricEx1FrontLeftButton" class="textButtons">Add Front on Left</button>
+          <button id="isometricEx1FrontRightButton" class="textButtons">Add Front on Right</button>
+          <button id="isometricEx1UndoFrontButton">Undo Front</button>
+          
+          <p id="orthographicTopEx1Answer"></p>
+          <p id="isometricEx1Answer"></p>
+      </div>
+      
+      <div>
+          <canvas class="orthographic" id="orthographicFrontEx1" width="120" height="100">
+            Your browser does not support the canvas element.
+          </canvas>
+          
+          <canvas class="orthographic" id="orthographicSideEx1" width="120" height="100">
+            Your browser does not support the canvas element.
+           </canvas>
+      </div>
+      
+      <div>
+          <button id="orthographicFrontEx1UndoButton">Undo</button>
+          <button id="orthographicFrontEx1ClearButton">Clear</button>
+          <button id="orthographicFrontEx1SolidButton"  style="border-style:inset;" onclick="drawDashedLine(this, orthographicFrontEx1DashedButton);">Solid</button>
+          <button id="orthographicFrontEx1DashedButton">Dashed</button>
+          <button id="orthographicFrontEx1CheckAnswerButton" style="display:none">Check Answer</button>
+          
+          <button id="orthographicSideEx1UndoButton">Undo</button>
+          <button id="orthographicSideEx1ClearButton">Clear</button>
+          <button id="orthographicSideEx1SolidButton"  style="border-style:inset;" onclick="drawDashedLine(this, orthographicSideEx1DashedButton);">Solid</button>
+          <button id="orthographicSideEx1DashedButton">Dashed</button>
+          <button id="orthographicSideEx1CheckAnswerButton" style="display:none">Check Answer</button>
+          
+          <p id="orthographicFrontEx1Answer"></p>
+          
+          <p id="orthographicSideEx1Answer"></p>
+          
+      </div>
+        <div>
+      
+          <p id="answer"></p>
+            <button id="writeToJSONButton">Write to JSON</button>
+          <br>
+      </div> 
+      
+      <div>
+          
+          <textarea id="question" rows="20" columns="60" style="width:100%"></textarea>
+          
+      </div>
+      
+      <div>
+          Log: <pre id="log" style="border: 1px solid #ccc;"></pre>
+      </div> 
+    <script src="js/Question.js"></script>
+    <script src="js/CanvasObject.js"></script>
+    <script src="js/GridText.js"></script>
+    <script src="js/Line.js"></script>
+    <script src="js/LineProperties.js"></script>
+    <script src="js/IsometricDistances.js"></script>
+    <script src="js/OrthographicDistances.js"></script>
+    <script src="js/AddTouch_ADMIN_only.js"></script>  
+    <script src="js/Messages.js"></script> 
+    <script src="js/IsometricAnswers.js"></script>
+    <script src="js/OrthographicAnswers.js"></script>
+    <script src="js/Startup_Ex1_Admin.js"></script>
+  </body>
+    
+     
+        
+</html>

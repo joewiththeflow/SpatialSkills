@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<!--
+    Copyright (c) 2012-2016 Adobe Systems Incorporated. All rights reserved.
+
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+<!-- html has been built upon simple introductory phonegap hello world template from http://docs.phonegap.com/tutorials/develop/hello-world-explained/ --> 
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
+    <!-- Good default declaration:
+    * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+    * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+    * Disables use of eval() and inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+        * Enable inline JS: add 'unsafe-inline' to default-src
+        * Enable eval(): add 'unsafe-eval' to default-src
+    * Create your own at http://cspisawesome.com
+    -->
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
+    
+    <!-- Bootstrap core CSS -->
+    <link href="js/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/themes/default/jquery.mobile-1.4.5.min.css">
+
+    <!-- css files for mirror exercise and home page table -->
+
+    <link href="css/mirror.css" rel="stylesheet">
+    <link href="css/customStyles.css" rel="stylesheet">
+
+    <title>Spatial Skills</title>
+    
+    <script src="js/vendor/jquery.js"></script>
+    <script src="js/vendor/jquerymobile/jquery.mobile-1.4.5.min.js"></script>
+    
+    
+    <style type="text/css">  
+        canvas { border: 1px solid black; }
+        
+        /* based upon the custom icon information regarding proper display of icons on mobile devices at: http://demos.jquerymobile.com/1.2.1/docs/buttons/buttons-icons.html */
+        @media only screen and (-webkit-min-device-pixel-ratio: 2) {
+	           .ui-icon-solidicon:after {
+		              background-image: url("css/themes/default/images/icons-png/solid-line-white.png");
+		              background-size: 18px 18px;
+	           }
+                .ui-icon-dashedicon:after {
+		              background-image: url("css/themes/default/images/icons-png/dashed-line-white.png");
+		              background-size: 18px 18px;
+	           }
+
+        }
+        /* used to help make panel always visible on larger screen. Based upon the code by user user9008591 on StackOverflow: https://stackoverflow.com/questions/30406059/jquery-mobile-position-of-external-panel-always-visible */
+        
+         @media (min-width: 55em) {
+
+            .ui-content {
+            padding-left: 18em;
+       
+            }
+
+            .mymenu {
+                visibility: visible;
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 17em;
+                clip: initial;
+                -webkit-transition: none !important;
+                -moz-transition: none !important;
+                transition: none !important;
+                -webkit-transform: none !important;
+                -moz-transform: none !important;
+                transform: none !important;
+                -webkit-box-shadow: none;
+                -moz-box-shadow: none;
+                box-shadow: none;
+	       }
+        }
+        /* used to help centre pop ups. Based upon suggestion from user thedude458 on jquery forum: https://forum.jquery.com/topic/expanding-the-default-jquerymobile-popup-width-to-a-of-screen */
+        .center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+        }  
+    
+    </style>
+  </head>
+   <body onload="startupAll();">
+       <!-- Start of login page: #login -->
+       <div data-role="page" id="login">
+
+	       <div data-role="header">
+		      <h1>Login</h1>
+	       </div><!-- /header -->
+
+	       <div role="main" class="ui-content" style="padding:0;">       
+                
+               <form id="loginForm">
+                   <label for="username">Username:</label>
+                   <input id="username" type="text" value=""/>
+                   <label for="password">Password:</label>
+                   <input id="password" type="password" value=""/>
+                   <input id="loginButton" type="button" value="Login" onClick="login()"/>
+               </form>
+                
+               
+            </div><!-- /content --> 
+       </div><!-- /page -->   
+       
+       
+       <!-- Start of home page: #home -->
+       <div data-role="page" id="home" class="ui-responsive-panel">
+
+	       <div data-role="header">
+                <a href="#nav-panel-home" data-icon="bars" data-theme="b" data-iconpos="notext">Menu</a>
+		      <h1>Home</h1>
+               <a href="#" class="ui-btn ui-shadow ui-corner-all ui-icon-info ui-btn-icon-notext ui-btn-b ui-btn-inline" data-role="button" onclick="logout()">Logout</a>
+	       </div><!-- /header -->
+
+	       <div role="main" class="ui-content">       
+                <div>
+                            <h2>Progress</h2>
+
+                            <table>
+                              <tr>
+                                <th>Exercise</th>
+                                <th>Questions</th>
+                                <th>Attempted</th>
+                                <th>Correct</th>
+                              </tr>
+                              <tr id="rowEx1">
+                                <td id="tdNameEx1"><a href="#ex1" data-transition="none">Exercise 1 - Top, Front and Side</a></td>
+                                <td id="tdQuestionsEx1"></td>
+                                <td id="tdAttemptedEx1"></td>
+                                <td id="tdCorrectEx1"></td>
+                              </tr>
+                              <tr id="rowEx2">
+                                <td id="tdNameEx2"><a href="#ex2" data-transition="none">Exercise 2 - 3D Shape</a></td>
+                                <td id="tdQuestionsEx2"></td>
+                                <td id="tdAttemptedEx2"></td>
+                                <td id="tdCorrectEx2"></td>
+                              </tr>
+                              <tr id="rowEx3">
+                                  
+                                <td id="tdNameEx3"><a href="#ex3" data-transition="none">Exercise 3 - Rotation Degrees</a></td>
+                                <td id="tdQuestionsEx3"></td>
+                                <td id="tdAttemptedEx3"></td>
+                                <td id="tdCorrectEx3"></td>
+                                  
+                              </tr>
+                              <tr id="rowEx4">
+                                <td id="tdNameEx4"><a href="#ex4" data-transition="none">Exercise 4 - Rotation Arrows</a></td>
+                                <td id="tdQuestionsEx4"></td>
+                                <td id="tdAttemptedEx4"></td>
+                                <td id="tdCorrectEx4"></td>
+                              </tr>
+                              <tr id="rowEx5">
+                                <td id="tdNameEx5"><a href="#ex5" data-transition="none">Exercise 5 - Rotation Multiple Axes</a></td>
+                                <td id="tdQuestionsEx5"></td>
+                                <td id="tdAttemptedEx5"></td>
+                                <td id="tdCorrectEx5"></td>
+                              </tr>
+                              <tr id="rowEx6">
+                                <td id="tdNameEx6"><a href="#ex6" data-transition="none">Exercise 6 - Reflection</a></td>
+                                <td id="tdQuestionsEx6"></td>
+                                <td id="tdAttemptedEx6"></td>
+                                <td id="tdCorrectEx6"></td>
+                              </tr>
+                            </table>
+               </div>
+        </div>
+                        
+                    <div data-role="panel" data-display="push" data-theme="b" data-position="left" data-position-fixed="true" id="nav-panel-home" class="mymenu">
+                    <ul data-role="listview">
+                    <li data-icon="delete"><a href="#" data-rel="close">Close menu</a></li>
+                    <li><a href="#home" class="ui-btn ui-shadow ui-corner-all ui-btn-active" data-transition="none">Home</a></li>
+                    <li><a href="#ex1" data-transition="none" >Exercise 1 - Top, Front and Side</a></li>
+                    <li><a href="#ex2" data-transition="none">Exercise 2 - 3D Shape</a></li>
+                    <li><a href="#ex3" data-transition="none">Exercise 3 - Rotation Degrees</a></li>
+                    <li><a href="#ex4" data-transition="none">Exercise 4 - Rotation Arrow Codes</a></li>
+                    <li><a href="#ex5" data-transition="none">Exercise 5 - Rotation Multiple Axes</a></li>
+                    <li><a href="#ex6" data-transition="none">Exercise 6 - Reflection</a></li>
+                    </ul>
+                    </div>
+           
+                   
+                    
+        </div>
+                        
+    
+
+        <!-- Start of exercise 1 page: #ex1 -->
+       <div data-role="page" id="ex1" data-theme="a">
+
+	       <div data-role="header" id="headerEx1">
+                <a href="#nav-panel-ex1" data-icon="bars" data-theme="b" data-iconpos="notext">Menu</a>
+		      <h1>Exercise 1 </h1>
+               <a href="#popupEx1" data-rel="popup" data-position-to="window" class="ui-btn ui-shadow ui-corner-all ui-icon-info ui-btn-icon-notext ui-btn-b ui-btn-inline">Popup</a>
+                <!--<a href="#" onclick="logout()">Logout</a>-->
+	       </div><!-- /header -->
+
+	       <div role="main" class="ui-content">
+         
+                        <div style="display:flex;flex-direction:row;">
+                            <div>
+                                <div>
+                                    <h5>Top</h5>
+                                    <canvas class="orthographic" id="orthographicTopEx1" width="120" height="100">Your browser does not support the canvas element.</canvas>
+                                    <div class="ui-nodisc-icon" style="display:inline;position:relative;">
+                                        <button id="orthographicTopEx1ClearButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-notext ui-btn-b ui-btn-inline" style="background-color: #ff0000; position:absolute;top:-120px;left:7px;">Clear</button>
+                                    </div>
+                                        <div class="ui-nodisc-icon">
+
+                                            <button id="orthographicTopEx1UndoButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-back ui-btn-icon-notext ui-btn-b ui-btn-inline"></button>
+                                            <button id="orthographicTopEx1SolidButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-solidicon ui-btn-icon-notext ui-btn-b ui-btn-inline ui-btn-active"style="border-style:inset;" onclick="drawDashedLine(this, orthographicTopEx1DashedButton);">Solid</button>
+                                            <button id="orthographicTopEx1DashedButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-dashedicon ui-btn-icon-notext ui-btn-b ui-btn-inline">Dashed</button>
+                                            <button id="orthographicTopEx1CheckAnswerButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-dashedicon ui-btn-icon-notext ui-btn-b ui-btn-inline" style="display:none">Check Answer</button>
+          
+                                            
+                                        </div>
+                                </div>
+                                <div style="display:flex;flex-direction:row;">
+                                    <div>
+                                        <h5>Front</h5>
+                                        <canvas class="orthographic" id="orthographicFrontEx1" width="120" height="100">Your browser does not support the canvas element.</canvas>
+                                        
+                                            
+                                        <div class="ui-nodisc-icon">
+                                            <button id="orthographicFrontEx1UndoButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-back ui-btn-icon-notext ui-btn-b ui-btn-inline">Undo</button>
+                                            
+                                            <button id="orthographicFrontEx1SolidButton" data-inline="true" style="border-style:inset;" onclick="drawDashedLine(this, orthographicFrontEx1DashedButton);" class="ui-btn ui-shadow ui-corner-all ui-icon-solidicon ui-btn-icon-notext ui-btn-b ui-btn-inline ui-btn-active">Solid</button>
+                                            <button id="orthographicFrontEx1DashedButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-dashedicon ui-btn-icon-notext ui-btn-b ui-btn-inline" >Dashed</button>
+                                            <button id="orthographicFrontEx1CheckAnswerButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-check ui-btn-icon-notext ui-btn-b ui-btn-inline" style="display:none">Check Answer</button>
+                                        
+                                        </div>
+                                    </div>
+                                    <div class="ui-nodisc-icon" style="display:inline;position:relative;">
+                                                <button id="orthographicFrontEx1ClearButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-notext ui-btn-b ui-btn-inline" style="background-color: #ff0000;">Clear</button>
+                                            </div>
+                                    <div>
+                                        <h5>Side</h5>
+                                        <canvas class="orthographic" id="orthographicSideEx1" width="120" height="100">Your browser does not support the canvas element.</canvas>
+                                        <div class="ui-nodisc-icon">
+                                            <button id="orthographicSideEx1UndoButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-back ui-btn-icon-notext ui-btn-b ui-btn-inline">Undo</button>
+                                            
+                                            <button id="orthographicSideEx1SolidButton" data-inline="true" style="border-style:inset;" onclick="drawDashedLine(this, orthographicSideEx1DashedButton);" class="ui-btn ui-shadow ui-corner-all ui-icon-solidicon ui-btn-icon-notext ui-btn-b ui-btn-inline ui-btn-active">Solid</button>
+                                            <button id="orthographicSideEx1DashedButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-dashedicon ui-btn-icon-notext ui-btn-b ui-btn-inline" >Dashed</button>
+                                            <button id="orthographicSideEx1CheckAnswerButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-check ui-btn-icon-notext ui-btn-b ui-btn-inline" style="display:none">Check Answer</button>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="ui-nodisc-icon" style="display:inline;position:relative;">
+                                        <button id="orthographicSideEx1ClearButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-notext ui-btn-b ui-btn-inline" style="background-color: #ff0000">Clear</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <canvas id="isometricEx1" width="250" height="315">Your browser does not support the canvas element.</canvas>
+                                <div class="ui-nodisc-icon">
+                                    <button id="Ex1CheckAnswerButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-check ui-btn-icon-notext ui-btn-b ui-btn-inline" style="background-color: #00aa00;">Check Answer</button>
+                                    <button id="Ex1PreviousButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-arrow-l ui-btn-icon-notext ui-btn-b ui-btn-inline" >Previous</button>
+                                    <div style="display:inline;">
+                                        <p style="display:inline;" id="questionNumberEx1"></p>
+                                    </div>
+                                    <button id="Ex1NextButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-arrow-r ui-btn-icon-notext ui-btn-b ui-btn-inline">Next</button>
+                                </div>
+                            </div>
+                        
+                        
+                        
+                        
+      
+                        <div>
+                            
+                            
+                        </div>
+                            
+          
+                        </div>
+                        <div>
+                            <p id="answer"></p>
+                            <br>
+                        </div> 
+        
+                            <div> 
+                                <p id="orthographicEx1FeedbackTop" style="display:inline;"></p>
+                                <p id="orthographicTopEx1Answer" style="display:inline;"></p>
+                            </div>
+                            <div> 
+                                <p id="orthographicEx1FeedbackFront" style="display:inline;"></p>
+                                <p id="orthographicFrontEx1Answer" style="display:inline;"></p>
+                            </div>
+                            <div> 
+                                <p id="orthographicEx1FeedbackSide" style="display:inline;"></p>
+                                <p id="orthographicSideEx1Answer" style="display:inline;"></p>
+                            </div>
+                    </div>
+                    
+                    <div data-role="panel" data-display="push" data-theme="b" id="nav-panel-ex1" class="mymenu">
+                    <ul data-role="listview">
+                    <li data-icon="delete"><a href="#" data-rel="close">Close menu</a></li>
+                    <li><a href="#home" data-transition="none">Home</a></li>
+                    <li><a href="#ex1" data-transition="none" class="ui-btn ui-shadow ui-corner-all ui-btn-active">Exercise 1 - Top, Front and Side</a></li>
+                    <li><a href="#ex2" data-transition="none">Exercise 2 - 3D Shape</a></li>
+                    <li><a href="#ex3" data-transition="none">Exercise 3 - Rotation Degrees</a></li>
+                    <li><a href="#ex4" data-transition="none">Exercise 4 - Rotation Arrow Codes</a></li>
+                    <li><a href="#ex5" data-transition="none">Exercise 5 - Rotation Multiple Axes</a></li>
+                    <li><a href="#ex6" data-transition="none">Exercise 6 - Reflection</a></li>
+                    </ul>
+                    </div>
+           
+           
+                     <!--test a pop up -->
+                    <div data-role="popup" id="popupEx1" style="background:white;">
+                        <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a><h2>Exercise 1 - Top, Front and Side</h2><p>In this exercise, you will attempt to draw the Top, Front and Side views for a given isometric object. Observe the following example. Note that the views have been coloured for this example to help aid understanding: </p><img src="img/ex1_example.png" class="center" style="width:40%" /><p>Also notice the dashed lines on the Side view. Dashed lines are used to represent edges which are not visible from the specified viewpoint. If a dashed line coincides with a solid line, only draw the solid line.</p>
+                    </div>
+           
+           
+            </div>
+            
+            
+            
+            
+    <!-- Start of exercise 2 page: #ex2 -->
+       <div data-role="page" id="ex2" data-theme="a">
+
+	       <div data-role="header">
+                <a href="#nav-panel-ex2" data-icon="bars" data-theme="b" data-iconpos="notext">Menu</a>
+		      <h1>Exercise 2</h1>
+                <a href="#popupEx2" data-rel="popup" data-position-to="window" class="ui-btn ui-shadow ui-corner-all ui-icon-info ui-btn-icon-notext ui-btn-b ui-btn-inline" style="padding:0;">Popup</a>
+                <!--<a href="#" onclick="logout()">Logout</a>-->
+	       </div><!-- /header -->
+
+	       <div role="main" class="ui-content">
+                 
+                        <div style="display:flex;flex-direction:row;">
+                            <div>
+                                <div>
+                                    <h5>Top</h5>
+                                    <canvas class="orthographic" id="orthographicTopEx2" width="155" height="100">Your browser does not support the canvas element.</canvas>
+                                    
+                                </div>
+                                <div style="display:flex;flex-direction:row;">
+                                    <div>
+                                        <h5>Front</h5>
+                                        <canvas class="orthographic" id="orthographicFrontEx2" width="155" height="100">Your browser does not support the canvas element.</canvas>
+                                    </div>
+                                    <div>
+                                        <h5>Side</h5>
+                                        <canvas class="orthographic" id="orthographicSideEx2" width="155" height="100">Your browser does not support the canvas element.</canvas>
+                                    </div>
+                                </div>
+                                <div>
+                                    
+                                    <p id="orthographicFrontEx2Answer"></p>
+                                    <p id="orthographicSideEx2Answer"></p>
+                                </div>
+                                <div>
+                                    <p id="answer"></p>
+                                    <br>
+                                </div>         
+                            </div>
+                                <div>
+                                <canvas id="isometricEx2" width="250" height="270">Your browser does not support the canvas element.</canvas> 
+                                    <div class="ui-nodisc-icon">
+                                        <button id="isometricEx2UndoButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-back ui-btn-icon-notext ui-btn-b ui-btn-inline">Undo</button>
+                                        
+                                        <button id="isometricEx2SolidButton"  style="border-style:inset;display:none" onclick="drawDashedLine(this, isometricEx2DashedButton);">Solid</button>
+                                        <button id="isometricEx2DashedButton" style="display:none">Dashed</button>
+                                        <button id="isometricEx2CheckAnswerButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-check ui-btn-icon-notext ui-btn-b ui-btn-inline" style="background-color: #00aa00;">Check Answer</button>
+                                        <button id="Ex2PreviousButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-arrow-l ui-btn-icon-notext ui-btn-b ui-btn-inline" >Previous</button>
+                                        <div style="display:inline;">
+                                            <p style="display:inline;" id="questionNumberEx2"></p>
+                                        </div>
+                                        <button id="Ex2NextButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-arrow-r ui-btn-icon-notext ui-btn-b ui-btn-inline">Next</button>
+        
+                                        <p id="orthographicTopEx2Answer"></p>
+                                        
+                                    </div>
+                                    
+                                </div>
+                                <div class="ui-nodisc-icon" style="display:inline;position:relative;">
+                                        <button id="isometricEx2ClearButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-notext ui-btn-b ui-btn-inline" style="background-color: #ff0000;position:absolute;left:7px;">Clear</button>
+                                    
+                                </div>
+                            
+                        </div>
+                        <div><p id="isometricEx2Answer"></p></div>
+                    </div>
+                    
+                    <div data-role="panel" data-display="push" data-theme="b" id="nav-panel-ex2" class="mymenu">
+                    <ul data-role="listview">
+                    <li data-icon="delete"><a href="#" data-rel="close">Close menu</a></li>
+                    <li><a href="#home" data-transition="none">Home</a></li>
+                    <li><a href="#ex1" data-transition="none">Exercise 1 - Top, Front and Side</a></li>
+                    <li><a href="#ex2" data-transition="none" class="ui-btn ui-shadow ui-corner-all ui-btn-active">Exercise 2 - 3D Shape</a></li>
+                    <li><a href="#ex3" data-transition="none">Exercise 3 - Rotation Degrees</a></li>
+                    <li><a href="#ex4" data-transition="none">Exercise 4 - Rotation Arrow Codes</a></li>
+                    <li><a href="#ex5" data-transition="none">Exercise 5 - Rotation Multiple Axes</a></li>
+                    <li><a href="#ex6" data-transition="none">Exercise 6 - Reflection</a></li>
+                    </ul>
+                    </div>
+           
+                    <div data-role="popup" id="popupEx2" style="background:white;">
+                        <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a><h2>Exercise 2 - 3D Shape</h2><p>In this exercise, you will attempt to draw the 3D isometric shape from the given Top, Front and Side views. Observe the following example. Note that the views have been coloured for this example to help aid understanding: </p><img src="img/ex1_example.png" class="center" style="width:40%" /><p>Also notice the dashed lines on the Side view. Remember that dashed lines are used to represent edges which are not visible from the specified viewpoint.</p>
+                    </div>
+                    
+                </div> 
+       
+    
+    <!-- Start of exercise 3 page: #ex3 -->
+       <div data-role="page" id="ex3" data-theme="a">
+
+	       <div data-role="header">
+                <a href="#nav-panel-ex3" data-icon="bars" data-theme="b" data-iconpos="notext">Menu</a>
+		      <h1>Exercise 3</h1>
+                <a href="#popupEx3" data-rel="popup" data-position-to="window" class="ui-btn ui-shadow ui-corner-all ui-icon-info ui-btn-icon-notext ui-btn-b ui-btn-inline" style="padding:0;">Popup</a>
+                <!--<a href="#" onclick="logout()">Logout</a>-->
+	       </div><!-- /header -->
+
+	       <div role="main" class="ui-content">
+        
+                        <div>
+                            <canvas id="isometricPreImageEx3" width="300" height="300">Your browser does not support the canvas element.</canvas>
+                            <canvas id="isometricEx3" width="260" height="300">Your browser does not support the canvas element.</canvas> 
+                            <div class="ui-nodisc-icon" style="display:inline;position:relative;">
+                            <button id="isometricEx3ClearButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-notext ui-btn-b ui-btn-inline" style="background-color: #ff0000;position:absolute;">Clear</button>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div style="display:inline;position:relative">
+                                <canvas id="rotationsEx3" width="300" height="100">Your browser does not support the canvas element.</canvas>
+                            </div>
+                            <div style="display:inline;position:absolute;" class="ui-nodisc-icon">
+                                <button id="isometricEx3UndoButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-back ui-btn-icon-notext ui-btn-b ui-btn-inline">Undo</button>
+                            
+                                <button id="isometricEx3SolidButton"  style="border-style:inset;display:none" onclick="drawDashedLine(this, isometricEx3DashedButton);">Solid</button>
+                                <button id="isometricEx3DashedButton" style="display:none">Dashed</button>
+                                <button id="isometricEx3CheckAnswerButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-check ui-btn-icon-notext ui-btn-b ui-btn-inline" style="background-color: #00aa00;">Check Answer</button>
+                                <button id="Ex3PreviousButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-arrow-l ui-btn-icon-notext ui-btn-b ui-btn-inline" >Previous</button>
+                                    <div style="display:inline;">
+                                        <p style="display:inline;" id="questionNumberEx3"></p>
+                                    </div>
+                                <button id="Ex3NextButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-arrow-r ui-btn-icon-notext ui-btn-b ui-btn-inline">Next</button>
+                            </div>
+                            <p id="orthographicTopEx3Answer"></p>
+                            <p id="isometricEx3Answer"></p>
+                        </div>
+                        <div>
+                            <p id="answer"></p>
+                            <br>
+                        </div>                 
+                    </div>
+                    
+                    <div data-role="panel" data-display="push" data-theme="b" id="nav-panel-ex3" class="mymenu">
+                    <ul data-role="listview">
+                    <li data-icon="delete"><a href="#" data-rel="close">Close menu</a></li>
+                    <li><a href="#home" data-transition="none">Home</a></li>
+                    <li><a href="#ex1" data-transition="none">Exercise 1 - Top, Front and Side</a></li>
+                    <li><a href="#ex2" data-transition="none">Exercise 2 - 3D Shape</a></li>
+                    <li><a href="#ex3" data-transition="none" class="ui-btn ui-shadow ui-corner-all ui-btn-active">Exercise 3 - Rotation Degrees</a></li>
+                    <li><a href="#ex4" data-transition="none">Exercise 4 - Rotation Arrow Codes</a></li>
+                    <li><a href="#ex5" data-transition="none">Exercise 5 - Rotation Multiple Axes</a></li>
+                    <li><a href="#ex6" data-transition="none">Exercise 6 - Reflection</a></li>
+                    </ul>
+                    </div>
+                    
+                    <div data-role="popup" id="popupEx3" style="background:white;">
+                        <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a><h2>Exercise 3 - Rotations Degrees</h2><p>In this exercise, you will attempt to draw the 3D shape after it has been rotated by the given value in degrees. The direction of rotation is determined by the right hand rule. For a positive rotation, point your thumb along the given axis towards the arrow. Your fingers will curl in the direction of the rotation. For a negative rotation, point your thumb away from the arrow and your fingers will curl in the direction of rotation.</p><img src="img/ex3_example_finalver2.png" class="center" style="width:70%" /><p></p>
+                    </div>
+           
+                </div>
+                
+                    
+    <!-- Start of exercise 4 page: #ex4 -->
+       <div data-role="page" id="ex4" data-theme="a">
+
+	       <div data-role="header">
+                <a href="#nav-panel-ex4" data-icon="bars" data-theme="b" data-iconpos="notext">Menu</a>
+		      <h1>Exercise 4</h1>
+                <a href="#popupEx4" data-rel="popup" data-position-to="window" class="ui-btn ui-shadow ui-corner-all ui-icon-info ui-btn-icon-notext ui-btn-b ui-btn-inline" style="padding:0;">Popup</a>
+                <!--<a href="#" onclick="logout()">Logout</a>-->
+	       </div><!-- /header -->
+
+	       <div role="main" class="ui-content">
+        
+                        <div>
+                            <canvas id="isometricPreImageEx4" width="300" height="300">Your browser does not support the canvas element.</canvas>
+                            <canvas id="isometricEx4" width="260" height="300">Your browser does not support the canvas element.</canvas> 
+                            <div class="ui-nodisc-icon" style="display:inline;position:relative;">
+                                <button id="isometricEx4ClearButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-notext ui-btn-b ui-btn-inline" style="background-color: #ff0000;position:absolute;">Clear</button>
+                            </div>
+                        </div>
+                        <div>  
+                            <div style="display:inline;position:relative">
+                                <canvas id="rotationsEx4" width="300" height="100">Your browser does not support the canvas element.</canvas>
+                            </div>
+                            <div style="display:inline;position:absolute;" class="ui-nodisc-icon">
+                                <button id="isometricEx4UndoButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-back ui-btn-icon-notext ui-btn-b ui-btn-inline">Undo</button>
+                            
+                                <button id="isometricEx4SolidButton"  style="border-style:inset;display:none" onclick="drawDashedLine(this, isometricEx4DashedButton);">Solid</button>
+                                <button id="isometricEx4DashedButton" style="display:none">Dashed</button>
+                                <button id="isometricEx4CheckAnswerButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-check ui-btn-icon-notext ui-btn-b ui-btn-inline" style="background-color: #00aa00;">Check Answer</button>
+                                <button id="Ex4PreviousButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-arrow-l ui-btn-icon-notext ui-btn-b ui-btn-inline" >Previous</button>
+                                <div style="display:inline;">
+                                    <p style="display:inline;" id="questionNumberEx4"></p>
+                                </div>
+                                <button id="Ex4NextButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-arrow-r ui-btn-icon-notext ui-btn-b ui-btn-inline">Next</button>
+                            </div>
+                            <p id="orthographicTopEx4Answer"></p>
+                            <p id="isometricEx4Answer"></p>
+                        </div>
+                        <div>
+                            <p id="answer"></p>
+                            <br>
+                        </div>        
+                    </div>
+           
+                    <div data-role="panel" data-display="push" data-theme="b" id="nav-panel-ex4" class="mymenu">
+                    <ul data-role="listview">
+                    <li data-icon="delete"><a href="#" data-rel="close">Close menu</a></li>
+                    <li><a href="#home" data-transition="none">Home</a></li>
+                    <li><a href="#ex1" data-transition="none">Exercise 1 - Top, Front and Side</a></li>
+                    <li><a href="#ex2" data-transition="none">Exercise 2 - 3D Shape</a></li>
+                    <li><a href="#ex3" data-transition="none">Exercise 3 - Rotation Degrees</a></li>
+                    <li><a href="#ex4" data-transition="none" class="ui-btn ui-shadow ui-corner-all ui-btn-active">Exercise 4 - Rotation Arrow Codes</a></li>
+                    <li><a href="#ex5" data-transition="none">Exercise 5 - Rotation Multiple Axes</a></li>
+                    <li><a href="#ex6" data-transition="none">Exercise 6 - Reflection</a></li>
+                    </ul>
+                    </div>
+           
+                    <div data-role="popup" id="popupEx4" style="background:white;">
+                        <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a><h2>Exercise 4 - Rotations Arrow Codes</h2><p>In this exercise, you will attempt to draw the 3D shape using arrow codes. An arrow indicates a 90 degree turn and is positive if it points to the right, and negative if it points to the left. As before, the direction of rotation is determined by the right hand rule. For a positive rotation, point your thumb along the given axis towards the arrow. Your fingers will curl in the direction of the rotation. For a negative rotation, point your thumb away from the arrow and your fingers will curl in the direction of rotation.</p><img src="img/ex4_example.png" class="center" style="width:70%" /><p></p>
+                    </div>
+           
+                </div>
+                
+                
+                    
+                    
+                    
+                    
+    <!-- Start of exercise 5 page: #ex5 -->
+       <div data-role="page" id="ex5" data-theme="a">
+
+	       <div data-role="header">
+                <a href="#nav-panel-ex5" data-icon="bars" data-theme="b" data-iconpos="notext">Menu</a>
+		      <h1>Exercise 5</h1>
+                <a href="#popupEx5" data-rel="popup" data-position-to="window" class="ui-btn ui-shadow ui-corner-all ui-icon-info ui-btn-icon-notext ui-btn-b ui-btn-inline" style="padding:0;">Popup</a>
+                <!--<a href="#" onclick="logout()">Logout</a>-->
+	       </div><!-- /header -->
+
+	       <div role="main" class="ui-content"> 
+                
+                        <div>
+                            <canvas id="isometricPreImageEx5" width="300" height="300">Your browser does not support the canvas element.</canvas>
+                            <canvas id="isometricEx5" width="260" height="300">Your browser does not support the canvas element.</canvas> 
+                            <div class="ui-nodisc-icon" style="display:inline;position:relative;">
+                                <button id="isometricEx5ClearButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-notext ui-btn-b ui-btn-inline" style="background-color: #ff0000;position:absolute;">Clear</button>
+                            </div>
+                        </div>
+                        <div> 
+                            <div style="display:inline;position:relative">
+                                <canvas id="rotationsEx5" width="300" height="100">Your browser does not support the canvas element.</canvas>
+                            </div>
+                            <div style="display:inline;position:absolute;" class="ui-nodisc-icon">
+                                <button id="isometricEx5UndoButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-back ui-btn-icon-notext ui-btn-b ui-btn-inline">Undo</button>
+                            
+                                <button id="isometricEx5SolidButton"  style="border-style:inset;display:none" onclick="drawDashedLine(this, isometricEx5DashedButton);">Solid</button>
+                                <button id="isometricEx5DashedButton" style="display:none">Dashed</button>
+                                <button id="isometricEx5CheckAnswerButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-check ui-btn-icon-notext ui-btn-b ui-btn-inline" style="background-color: #00aa00;">Check Answer</button>
+                                <button id="Ex5PreviousButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-arrow-l ui-btn-icon-notext ui-btn-b ui-btn-inline" >Previous</button>
+                                    <div style="display:inline;">
+                                        <p style="display:inline;" id="questionNumberEx5"></p>
+                                    </div>
+                                <button id="Ex5NextButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-arrow-r ui-btn-icon-notext ui-btn-b ui-btn-inline">Next</button>
+                            </div>
+                            <p id="orthographicTopEx5Answer"></p>
+                            <p id="isometricEx5Answer"></p>
+                        </div>
+                        <div>
+                            <p id="answer"></p>
+                            <br>
+                        </div>               
+            </div>
+           <div data-role="panel" data-display="push" data-theme="b" id="nav-panel-ex5" class="mymenu">
+                <ul data-role="listview">
+                    <li data-icon="delete"><a href="#" data-rel="close">Close menu</a></li>
+                    <li><a href="#home" data-transition="none">Home</a></li>
+                    <li><a href="#ex1" data-transition="none">Exercise 1 - Top, Front and Side</a></li>
+                    <li><a href="#ex2" data-transition="none">Exercise 2 - 3D Shape</a></li>
+                    <li><a href="#ex3" data-transition="none">Exercise 3 - Rotation Degrees</a></li>
+                    <li><a href="#ex4" data-transition="none">Exercise 4 - Rotation Arrow Codes</a></li>
+                    <li><a href="#ex5" data-transition="none" class="ui-btn ui-shadow ui-corner-all ui-btn-active">Exercise 5 - Rotation Multiple Axes</a></li>
+                    <li><a href="#ex6" data-transition="none">Exercise 6 - Reflection</a></li>
+                </ul>
+           </div>
+           
+           <div data-role="popup" id="popupEx5" style="background:white;">
+                        <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a><h2>Exercise 5 - Rotations Multiple Axes</h2><p>In this exercise, you will attempt to draw the 3D shape using arrow codes, rotating along multiple axes. An arrow indicates a 90 degree turn and is positive if it points to the right, and negative if it points to the left. As before, the direction of rotation is determined by the right hand rule. For a positive rotation, point your thumb along the given axis towards the arrow. Your fingers will curl in the direction of the rotation. For a negative rotation, point your thumb away from the arrow and your fingers will curl in the direction of rotation.</p><img src="img/ex5_example.png" class="center" style="width:70%" /><p></p>
+                    </div>
+           
+        </div>
+               
+                    
+    <!-- Start of exercise 6 page: #ex6 -->
+       <div data-role="page" id="ex6" data-theme="a">
+
+	       <div data-role="header">
+                <a href="#nav-panel-ex6" data-icon="bars" data-theme="b" data-iconpos="notext">Menu</a>
+		      <h1>Exercise 6</h1>
+                <a href="#popupEx6" data-rel="popup" data-position-to="window" class="ui-btn ui-shadow ui-corner-all ui-icon-info ui-btn-icon-notext ui-btn-b ui-btn-inline" style="padding:0;">Popup</a>
+                <!--<a href="#" onclick="logout()">Logout</a>-->
+	       </div><!-- /header -->
+
+	       <div role="main" class="ui-content">
+         
+                        <div id="stage">
+                            <canvas id="isometricPreImageEx6" width="560" height="560">Your browser does not support the canvas element.
+                            </canvas>
+                            <canvas id="isometricEx6" width="560" height="560">Your browser does not support the canvas element.</canvas>
+                            <div class="ui-nodisc-icon" style="display:inline;position:absolute;left:562px;">
+                                <button id="isometricEx6ClearButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-delete ui-btn-icon-notext ui-btn-b ui-btn-inline" style="background-color: #ff0000;">Clear</button>
+                            </div>
+                        </div>
+                        
+                        <div class="ui-nodisc-icon">
+                            <button id="isometricEx6UndoButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-back ui-btn-icon-notext ui-btn-b ui-btn-inline">Undo</button>
+                            
+                            <button id="isometricEx6SolidButton"  style="border-style:inset;display:none" onclick="drawDashedLine(this, isometricEx6DashedButton);">Solid</button>
+                            <button id="isometricEx6DashedButton" style="display:none">Dashed</button>
+                            <button id="isometricEx6CheckAnswerButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-check ui-btn-icon-notext ui-btn-b ui-btn-inline" style="background-color: #00aa00;">Check Answer</button>
+                            <button id="Ex6PreviousButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-arrow-l ui-btn-icon-notext ui-btn-b ui-btn-inline" >Previous</button>
+                                <div style="display:inline;">
+                                    <p style="display:inline;" id="questionNumberEx6"></p>
+                                </div>
+                            <button id="Ex6NextButton" data-inline="true" class="ui-btn ui-shadow ui-corner-all ui-icon-arrow-r ui-btn-icon-notext ui-btn-b ui-btn-inline">Next</button>
+        
+                            <p id="orthographicTopEx6Answer"></p>
+                            <p id="isometricEx6Answer"></p>
+                        </div>
+                        <div>
+                            <p id="answer"></p>
+                            <br>
+                        </div>  
+               
+            </div>
+            <div data-role="panel" data-display="push" data-theme="b" id="nav-panel-ex6" class="mymenu">
+                <ul data-role="listview">
+                    <li data-icon="delete"><a href="#" data-rel="close">Close menu</a></li>
+                    <li><a href="#home" data-transition="none">Home</a></li>
+                    <li><a href="#ex1" data-transition="none">Exercise 1 - Top, Front and Side</a></li>
+                    <li><a href="#ex2" data-transition="none">Exercise 2 - 3D Shape</a></li>
+                    <li><a href="#ex3" data-transition="none">Exercise 3 - Rotation Degrees</a></li>
+                    <li><a href="#ex4" data-transition="none">Exercise 4 - Rotation Arrow Codes</a></li>
+                    <li><a href="#ex5" data-transition="none">Exercise 5 - Rotation Multiple Axes</a></li>
+                    <li><a href="#ex6" data-transition="none" class="ui-btn ui-shadow ui-corner-all ui-btn-active">Exercise 6 - Reflection</a></li>
+                </ul>
+           </div>
+           
+           <div data-role="popup" id="popupEx6" style="background:white;">
+                        <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-a ui-icon-delete ui-btn-icon-notext ui-btn-right">Close</a><h2>Exercise 6 - Reflection</h2><p>In this exercise, you will attempt to draw the reflection of the given 3D shape. Pay close attention to where the mirror is positioned. In the earlier questions, the mirror is right up against the shape, whereas in later questions the mirror is away from the shape. Some questions may be pre started for you.</p><img src="img/ex6_example.png" class="center" style="width:20%" /><p>Please do not draw over existing lines as this will result in an incorrect answer. Only draw the necessary lines (as shown in green above).</p>
+                    </div>
+        </div>
+
+    
+    <script src="js/Exercise1Questions.js"></script>
+    <script src="js/Exercise2Questions.js"></script>
+    <script src="js/Exercise3Questions.js"></script>
+    <script src="js/Exercise4Questions.js"></script>
+    <script src="js/Exercise5Questions.js"></script>
+    <script src="js/Exercise6Questions.js"></script>
+    <script src="js/Exercise.js"></script>
+    <script src="js/ExercisesSetup.js"></script>
+    <script src="js/Login.js"></script>  
+    <script src="js/Question.js"></script>
+    <script src="js/CanvasObject.js"></script>
+    <script src="js/Line.js"></script>
+    <script src="js/LineProperties.js"></script>
+    <script src="js/IsometricDistances.js"></script>
+    <script src="js/OrthographicDistances.js"></script>
+    <script src="js/AddTouch.js"></script>  
+    <script src="js/Messages.js"></script> 
+    <script src="js/IsometricAnswers.js"></script>
+    <script src="js/OrthographicAnswers.js"></script>
+    <script src="js/Startup2_All.js"></script>
+    <script src="js/Startup3_DrawOrthographicFromIsometric.js"></script>
+    <script src="js/Startup3_DrawIsometricFromOrthographic.js"></script>
+    <script src="js/Startup3_DrawSingleIsometricRotationDegreesSingleAxis.js"></script>
+    <script src="js/Startup3_DrawSingleIsometricRotationArrowsSingleAxis.js"></script>
+    <script src="js/Startup3_DrawSingleIsometricRotationArrowsMultipleAxes.js"></script>
+    <script src="js/Startup3_DrawSingleIsometricReflection.js"></script>
+    <script src=js/HomePageLoad.js></script>   
+    
+  </body>
+    
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    
+    <script type="text/javascript">
+        app.initialize();
+    </script>
+
+</html>

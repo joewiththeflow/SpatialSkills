@@ -1,0 +1,20 @@
+/* based upon absolute and relative positioning tutorials and code on W3Schools: https://www.w3schools.com/css/css_positioning.asp */
+/* also based heavily on the scode and style of user rrichter on StackOverflow: https://stackoverflow.com/questions/48474/how-do-i-position-one-image-on-top-of-another-in-html */
+
+#stage {
+    width: 560px;
+    height: 560px;
+    position: relative;
+}
+
+
+#isometricEx6 { 
+    z-index: 2; 
+    position: absolute;
+}
+  
+#isometricPreImageEx6 { 
+    z-index: 1;
+    position: absolute;
+    background-color: white; 
+}
