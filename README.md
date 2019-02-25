@@ -1,17 +1,18 @@
 # SpatialSkills - managed by Joseph Doogan
 Code from spatial skills app created at University with accompanying documentation (minus dissertation)
 Single Page Application created using JQueryMobile, JQuery, JavaScript, HTML and CSS.
-Drawing Canvases are created using the HTML5 Canvas element supported by JavaScript and occasional JQuery
+Drawing Canvases are created using the HTML5 Canvas element supported by JavaScript and occasional JQuery.
+
+Structure of app allows deployment to iOS and Android devices using PhoneGap.
 
 # Test the app on a desktop browser
 
-1. Navigate to the www folder and open the index.html page
-2. Open Chrome
-3. Navigate through the app
+1. Navigate to the www folder and open the index.html page (e.g using Chrome)
+2. Navigate through the app
 
 # Simulate testing the app on a mobile device such as an iPad
 
-1. Navigate to the www folder and open the index.html page
+1. Navigate to the www folder and open the index.html page in Chrome
 2. Open Chrome Developer Tools and ensure Device Toolbar is enabled
 3. Select an iPad for example, or any other device to simulate operation
 4. Navigate through the app
