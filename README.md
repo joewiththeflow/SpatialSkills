@@ -1,7 +1,7 @@
 # SpatialSkills - managed by Joseph Doogan
 Code from spatial skills app created at University with accompanying documentation (minus dissertation)
 Single Page Application created using JQueryMobile, JQuery, JavaScript, HTML and CSS.
-Drawing Canvases are created using the HTML5 Canvas element suported by JavaScript and occasional JQuery
+Drawing Canvases are created using the HTML5 Canvas element supported by JavaScript and occasional JQuery
 
 # Test the app on a desktop browser
 
@@ -15,7 +15,7 @@ Drawing Canvases are created using the HTML5 Canvas element suported by JavaScri
 2. Open Chrome Developer Tools and ensure Device Toolbar is enabled
 3. Select an iPad for example, or any other device to simulate operation
 4. Navigate through the app
-5. Select the Rotate button to change between lnadscape and protrait modes
+5. Select the Rotate button to change between landscape and protrait modes
 
 # Drawing Exercice Questions
 
